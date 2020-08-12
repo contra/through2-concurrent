@@ -31,7 +31,7 @@ module.exports = function concurrentThrough (options, transform, flush) {
       lastCallback = callback;
     }
 
-    transform.call(this, message, enc, function (err) {
+    transform.call(this, message, enc, function (err, data) {
       // Ignore multiple calls of the callback (shouldn't ever
       // happen, but just in case)
       if (callbackCalled) return;
@@ -40,7 +40,7 @@ module.exports = function concurrentThrough (options, transform, flush) {
       if (err) {
         self.emit('error', err);
       } else if (arguments.length > 1) {
-        self.push(arguments[1]);
+        self.push(data);
       }
 
       concurrent--;
